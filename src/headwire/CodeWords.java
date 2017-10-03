@@ -38,7 +38,7 @@ public class CodeWords {
 	private String codeword;
 	private String var;
 	private String type;
-	
+
 	private static WebDriver driver;
 	private static double multiplicator;
 	private static ScreenRecorder screenRecorder;
@@ -85,26 +85,38 @@ public class CodeWords {
 		case "highlight":
 			highlight(var, type);
 			break;
-		case "scroll":
-			scroll();
+		case "scrolldown":
+			scrolldown();
+			break;
+		case "scrollup":
+			scrollup();
+			break;
+		case "enter":
+			enter();
+			break;
 		case "start":
 			start();
 			break;
 		case "stop":
 			stop();
 			break;
-		
+		case "quit":
+			quit();
+			break;
+
 		}
 	}
-
-	private void scroll() {
-		// TODO Auto-generated method stub
+	private void quit() {
+		driver.quit();
 		
+	}
+	private void enter() {
+		WebElement element = driver.switchTo().activeElement();
+		element.submit();		
 	}
 
 	private void stop() throws Exception {
 		screenRecorder.stop();
-		driver.quit();
 	}
 
 	private void start() throws Exception {
@@ -120,27 +132,27 @@ public class CodeWords {
 		options.addArguments("--start-fullscreen");
 		driver = new ChromeDriver(options);
 	}
-	
+
 	private static void initFirefoxDriver() {
 		String exePath = "C:\\Users\\Pascal\\Downloads\\geckodriver.exe";
 		System.setProperty("webdriver.gecko.driver", exePath);
 		FirefoxOptions options = new FirefoxOptions();
 		options.addArguments("--start-fullscreen");
 		driver = new FirefoxDriver(options);
-		
+
 	}
 
 	private static Robot initRobot() throws Exception {
 		Robot robot = new Robot();
 		return robot;
 	}
-	
+
 	private static void initScreenRecorder() throws Exception {
 		GraphicsConfiguration gc = GraphicsEnvironment
 				.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice()
 				.getDefaultConfiguration();
-		
+
 		screenRecorder = new ScreenRecorder(gc,
 				new Format(MediaTypeKey, MediaType.FILE, MimeTypeKey, MIME_AVI),
 				new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
@@ -152,7 +164,7 @@ public class CodeWords {
 						FrameRateKey, Rational.valueOf(30)),
 				null);
 	}
-	
+
 	private static void setMultiplicator() {
 		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice device = g.getDefaultScreenDevice();
@@ -177,6 +189,16 @@ public class CodeWords {
 	private void dragndrop() {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void scrolldown() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("scroll(0, 250);");
+	}
+	
+	private void scrollup() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("scroll(0, -250);");
 	}
 
 	private void rightclick(String var, String type) {
@@ -208,12 +230,12 @@ public class CodeWords {
 		} else if (type.equals("name")) {
 			pTo = driver.findElement(By.name(var)).getLocation();
 		}
-		
+
 		java.awt.Point mouse = MouseInfo.getPointerInfo().getLocation();
-		
+
 		double pFromX = mouse.x;
 		double pFromY = mouse.y;
-		
+
 		setMultiplicator();
 
 		double pToX = pTo.x*multiplicator;
@@ -245,7 +267,7 @@ public class CodeWords {
 					j++;
 				}
 			}
-			
+
 		} else if(pFromX < pToX && pFromY > pToY) {
 			for(i = (int) pFromX; i<pToX; i++) {
 				initRobot().mouseMove(i, j);
@@ -285,7 +307,7 @@ public class CodeWords {
 		}	
 		Thread.sleep(2000);
 	}
-	
+
 	private void doubleclick(String var, String type) {
 		Actions action = new Actions(driver);
 		if (type.equals("xpath")) {
@@ -299,12 +321,12 @@ public class CodeWords {
 			action.doubleClick(driver.findElement(By.name(var))).build().perform();
 		}
 	}
-	
+
 	private void goToAndClick(String var, String type) throws Exception {
 		goTo(var, type);
 		click(var, type);
 	}
-	
+
 	private void highlight(String var, String type) {
 		JavascriptExecutor js=(JavascriptExecutor)driver;
 		if (type.equals("xpath")) {
