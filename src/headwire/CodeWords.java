@@ -1,11 +1,26 @@
 package headwire;
 
-import java.awt.AWTException;
+import static org.monte.media.FormatKeys.EncodingKey;
+import static org.monte.media.FormatKeys.FrameRateKey;
+import static org.monte.media.FormatKeys.KeyFrameIntervalKey;
+import static org.monte.media.FormatKeys.MIME_AVI;
+import static org.monte.media.FormatKeys.MediaTypeKey;
+import static org.monte.media.FormatKeys.MimeTypeKey;
+import static org.monte.media.VideoFormatKeys.CompressorNameKey;
+import static org.monte.media.VideoFormatKeys.DepthKey;
+import static org.monte.media.VideoFormatKeys.ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE;
+import static org.monte.media.VideoFormatKeys.QualityKey;
+
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Robot;
 
+import org.monte.media.Format;
+import org.monte.media.FormatKeys.MediaType;
+import org.monte.media.math.Rational;
+import org.monte.screenrecorder.ScreenRecorder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,6 +41,7 @@ public class CodeWords {
 	
 	private static WebDriver driver;
 	private static double multiplicator;
+	private static ScreenRecorder screenRecorder;
 
 	public void execute (String codeword, String var, String type) throws Exception {
 		this.codeword = codeword;
@@ -60,7 +76,33 @@ public class CodeWords {
 		case "upload":
 			upload();
 			break;
+		case "doubleclick":
+			doubleclick(var, type);
+			break;
+		case "goToAndClick":
+			goToAndClick();
+			break;
+		case "highlight":
+			highlight();
+			break;
+		case "start":
+			start();
+			break;
+		case "stop":
+			stop();
+			break;
+		
 		}
+	}
+
+	private void stop() throws Exception {
+		screenRecorder.stop();
+		driver.quit();
+	}
+
+	private void start() throws Exception {
+		initScreenRecorder();
+		screenRecorder.start();
 	}
 
 	private static void initChromeDriver() {
@@ -84,6 +126,24 @@ public class CodeWords {
 	private static Robot initRobot() throws Exception {
 		Robot robot = new Robot();
 		return robot;
+	}
+	
+	private static void initScreenRecorder() throws Exception {
+		GraphicsConfiguration gc = GraphicsEnvironment
+				.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice()
+				.getDefaultConfiguration();
+		
+		screenRecorder = new ScreenRecorder(gc,
+				new Format(MediaTypeKey, MediaType.FILE, MimeTypeKey, MIME_AVI),
+				new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+						CompressorNameKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+						DepthKey, (int)24, FrameRateKey, Rational.valueOf(15),
+						QualityKey, 1.0f,
+						KeyFrameIntervalKey, (int) (15 * 60)),
+				new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey,"black",
+						FrameRateKey, Rational.valueOf(30)),
+				null);
 	}
 	
 	private static void setMultiplicator() {
@@ -130,7 +190,6 @@ public class CodeWords {
 		WebElement element = driver.switchTo().activeElement();
 		element.sendKeys(var);
 		Thread.sleep(1000);
-//		element.submit();
 	}
 
 	private void goTo(String var, String type) throws Exception {
@@ -219,6 +278,18 @@ public class CodeWords {
 		}	
 		Thread.sleep(2000);
 	}
+	
+	private void doubleclick(String var, String type) {
+		
+	}
+	
+	private void goToAndClick() {
+		
+	}
+	
+	private void highlight() {
+//		highlight(driver, stopElement);
+	}
 
 	private void open(String var) {
 		driver.get(var);
@@ -232,9 +303,4 @@ public class CodeWords {
 			initFirefoxDriver();
 		}
 	}
-	
-	public void quit() {
-		driver.quit();
-	}
 }
-
