@@ -16,6 +16,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 
 import org.monte.media.Format;
 import org.monte.media.FormatKeys.MediaType;
@@ -67,8 +68,8 @@ public class CodeWords {
 		case "rightclick":
 			rightclick(var, type);
 			break;
-		case "dragndrop":
-			dragndrop();
+		case "dragAndDrop":
+			dragAndDdrop();
 			break;
 		case "audio":
 			audio();
@@ -186,9 +187,84 @@ public class CodeWords {
 
 	}
 
-	private void dragndrop() {
-		// TODO Auto-generated method stub
+	private void dragAndDdrop() throws Exception {
+		Point pTo = null;
+		if (type.equals("xpath")) {
+			pTo = driver.findElement(By.xpath(var)).getLocation();
+		} else if (type.equals("id")) {
+			pTo = driver.findElement(By.id(var)).getLocation();
+		} else if (type.equals("name")) {
+			pTo = driver.findElement(By.name(var)).getLocation();
+		}
 
+		java.awt.Point mouse = MouseInfo.getPointerInfo().getLocation();
+
+		double pFromX = mouse.x;
+		double pFromY = mouse.y;
+
+		setMultiplicator();
+
+		double pToX = pTo.x*multiplicator;
+		double pToY = pTo.y*multiplicator;
+
+		Dimension toSize = null;
+		if (type.equals("xpath")) {
+			toSize = driver.findElement(By.xpath(var)).getSize();
+		} else if (type.equals("id")) {
+			toSize = driver.findElement(By.id(var)).getSize();
+		} else if (type.equals("name")) {
+			toSize = driver.findElement(By.name(var)).getSize();
+		}
+
+		int xCentreTo = toSize.width / 2;
+		int yCentreTo = toSize.height / 2;
+
+		pToX += xCentreTo;
+		pToY += yCentreTo;
+
+		int i = (int) pFromX;
+		int j = (int) pFromY;
+		
+		initRobot().mousePress(InputEvent.BUTTON1_MASK);
+
+		if(pFromX < pToX && pFromY < pToY) {
+			for(i = (int) pFromX; i<pToX; i++) {
+				initRobot().mouseMove(i, j);
+				Thread.sleep(2);
+				if(j<pToY) {
+					j++;
+				}
+			}
+
+		} else if(pFromX < pToX && pFromY > pToY) {
+			for(i = (int) pFromX; i<pToX; i++) {
+				initRobot().mouseMove(i, j);
+				Thread.sleep(2);
+				if(j>pToY) {
+					j--;
+				}
+			}
+
+		} else if(pFromX > pToX && pFromY < pToY) {
+			for(i = (int) pFromX; i>pToX; i--) {
+				initRobot().mouseMove(i, j);
+				Thread.sleep(2);
+				if(j<pToY) {
+					j++;
+				}
+			}
+
+		} else if(pFromX > pToX && pFromY > pToY) {
+			for(i = (int) pFromX; i>pToX; i--) {
+				initRobot().mouseMove(i, j);
+				Thread.sleep(2);
+				if(j>pToY) {
+					j--;
+				}
+			}
+		}
+		
+		initRobot().mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
 	private void scrolldown() {
@@ -340,7 +416,6 @@ public class CodeWords {
 
 	private void open(String var) {
 		driver.get(var);
-
 	}
 
 	private void use(String var) {
