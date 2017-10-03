@@ -83,7 +83,7 @@ public class CodeWords {
 			goToAndClick(var, type);
 			break;
 		case "highlight":
-			highlight();
+			highlight(var, type);
 			break;
 		case "scroll":
 			scroll();
@@ -305,8 +305,15 @@ public class CodeWords {
 		click(var, type);
 	}
 	
-	private void highlight() {
-//		highlight(driver, stopElement);
+	private void highlight(String var, String type) {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+		if (type.equals("xpath")) {
+			js.executeScript("arguments[0].setAttribute('style', 'border: 2px solid red;');", driver.findElement(By.xpath(var)));
+		} else if (type.equals("id")) {
+			js.executeScript("arguments[0].setAttribute('style', 'border: 2px solid red;');", driver.findElement(By.id(var)));
+		} else if (type.equals("name")) {
+			js.executeScript("arguments[0].setAttribute('style', 'border: 2px solid red;');", driver.findElement(By.name(var)));
+		}
 	}
 
 	private void open(String var) {
