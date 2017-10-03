@@ -87,10 +87,10 @@ public class CodeWords {
 			highlight(var, type);
 			break;
 		case "scrolldown":
-			scrolldown();
+			scrolldown(var);
 			break;
 		case "scrollup":
-			scrollup();
+			scrollup(var);
 			break;
 		case "enter":
 			enter();
@@ -267,14 +267,14 @@ public class CodeWords {
 		initRobot().mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
-	private void scrolldown() {
+	private void scrolldown(String var) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("scroll(0, 250);");
+		js.executeScript("scroll(0," + var + ");");
 	}
 	
-	private void scrollup() {
+	private void scrollup(String var) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("scroll(0, -250);");
+		js.executeScript("scroll(0, -" + var + ");");
 	}
 
 	private void rightclick(String var, String type) {
