@@ -28,9 +28,13 @@ public class MainClass {
 					codeword= strArr[0];
 					var = strArr[1];
 					type = strArr[2];
-				} else {
+				} else if (strArr.length == 2) {
 					codeword= strArr[0];
 					var = strArr[1];
+					type = null;
+				} else {
+					codeword= strArr[0];
+					var = null;
 					type = null;
 				}
 
