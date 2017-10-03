@@ -80,11 +80,13 @@ public class CodeWords {
 			doubleclick(var, type);
 			break;
 		case "goToAndClick":
-			goToAndClick();
+			goToAndClick(var, type);
 			break;
 		case "highlight":
 			highlight();
 			break;
+		case "scroll":
+			scroll();
 		case "start":
 			start();
 			break;
@@ -93,6 +95,11 @@ public class CodeWords {
 			break;
 		
 		}
+	}
+
+	private void scroll() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void stop() throws Exception {
@@ -173,16 +180,16 @@ public class CodeWords {
 	}
 
 	private void rightclick(String var, String type) {
-		Actions oAction = new Actions(driver);
+		Actions action = new Actions(driver);
 		if (type.equals("xpath")) {
-			oAction.moveToElement(driver.findElement(By.xpath(var)));
-			oAction.contextClick(driver.findElement(By.xpath(var))).build().perform();
+			action.moveToElement(driver.findElement(By.xpath(var)));
+			action.contextClick(driver.findElement(By.xpath(var))).build().perform();
 		} else if (type.equals("id")) {
-			oAction.moveToElement(driver.findElement(By.id(var)));
-			oAction.contextClick(driver.findElement(By.id(var))).build().perform();
+			action.moveToElement(driver.findElement(By.id(var)));
+			action.contextClick(driver.findElement(By.id(var))).build().perform();
 		} else if (type.equals("name")) {
-			oAction.moveToElement(driver.findElement(By.name(var)));
-			oAction.contextClick(driver.findElement(By.name(var))).build().perform();
+			action.moveToElement(driver.findElement(By.name(var)));
+			action.contextClick(driver.findElement(By.name(var))).build().perform();
 		}		
 	}
 
@@ -192,7 +199,7 @@ public class CodeWords {
 		Thread.sleep(1000);
 	}
 
-	private void goTo(String var, String type) throws Exception {
+	private static void goTo(String var, String type) throws Exception {
 		Point pTo = null;
 		if (type.equals("xpath")) {
 			pTo = driver.findElement(By.xpath(var)).getLocation();
@@ -233,7 +240,7 @@ public class CodeWords {
 		if(pFromX < pToX && pFromY < pToY) {
 			for(i = (int) pFromX; i<pToX; i++) {
 				initRobot().mouseMove(i, j);
-				Thread.sleep(4);
+				Thread.sleep(2);
 				if(j<pToY) {
 					j++;
 				}
@@ -242,7 +249,7 @@ public class CodeWords {
 		} else if(pFromX < pToX && pFromY > pToY) {
 			for(i = (int) pFromX; i<pToX; i++) {
 				initRobot().mouseMove(i, j);
-				Thread.sleep(4);
+				Thread.sleep(2);
 				if(j>pToY) {
 					j--;
 				}
@@ -251,7 +258,7 @@ public class CodeWords {
 		} else if(pFromX > pToX && pFromY < pToY) {
 			for(i = (int) pFromX; i>pToX; i--) {
 				initRobot().mouseMove(i, j);
-				Thread.sleep(4);
+				Thread.sleep(2);
 				if(j<pToY) {
 					j++;
 				}
@@ -260,7 +267,7 @@ public class CodeWords {
 		} else if(pFromX > pToX && pFromY > pToY) {
 			for(i = (int) pFromX; i>pToX; i--) {
 				initRobot().mouseMove(i, j);
-				Thread.sleep(4);
+				Thread.sleep(2);
 				if(j>pToY) {
 					j--;
 				}
@@ -268,7 +275,7 @@ public class CodeWords {
 		}
 	}
 
-	private void click(String var, String type) throws Exception {
+	private static void click(String var, String type) throws Exception {
 		if (type.equals("xpath")) {
 			driver.findElement(By.xpath(var)).click();
 		} else if (type.equals("id")) {
@@ -280,11 +287,22 @@ public class CodeWords {
 	}
 	
 	private void doubleclick(String var, String type) {
-		
+		Actions action = new Actions(driver);
+		if (type.equals("xpath")) {
+			action.moveToElement(driver.findElement(By.xpath(var)));
+			action.doubleClick(driver.findElement(By.xpath(var))).build().perform();
+		} else if (type.equals("id")) {
+			action.moveToElement(driver.findElement(By.id(var)));
+			action.doubleClick(driver.findElement(By.id(var))).build().perform();
+		} else if (type.equals("name")) {
+			action.moveToElement(driver.findElement(By.name(var)));
+			action.doubleClick(driver.findElement(By.name(var))).build().perform();
+		}
 	}
 	
-	private void goToAndClick() {
-		
+	private void goToAndClick(String var, String type) throws Exception {
+		goTo(var, type);
+		click(var, type);
 	}
 	
 	private void highlight() {
