@@ -11,7 +11,6 @@ public class MainClass {
 	public static void main(String[] args) throws Exception {
 		
 		readFile();
-
 	}
 	
 	public static void readFile () throws Exception {
@@ -37,7 +36,6 @@ public class MainClass {
 					var = null;
 					type = null;
 				}
-
 				codewords.execute(codeword, var, type);
 			}
 		} catch (IOException e) {

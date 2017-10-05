@@ -17,6 +17,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import org.monte.media.Format;
 import org.monte.media.FormatKeys.MediaType;
@@ -25,6 +26,7 @@ import org.monte.screenrecorder.ScreenRecorder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -68,6 +70,9 @@ public class CodeWords {
 		case "rightclick":
 			rightclick(var, type);
 			break;
+		case "getItem":
+			getItem(var);
+			break;
 		case "dragAndDrop":
 			dragAndDdrop();
 			break;
@@ -107,6 +112,7 @@ public class CodeWords {
 
 		}
 	}
+
 	private void quit() {
 		driver.quit();
 		
@@ -289,6 +295,20 @@ public class CodeWords {
 			action.moveToElement(driver.findElement(By.name(var)));
 			action.contextClick(driver.findElement(By.name(var))).build().perform();
 		}		
+	}
+	
+	private void getItem(String var) throws Exception {	
+		int number = Integer.parseInt(var);
+		
+		for(int i = 1; i <= number; i++) {
+			initRobot().keyPress(KeyEvent.VK_DOWN);
+			initRobot().keyRelease(KeyEvent.VK_DOWN);
+			Thread.sleep(1000);
+		}
+		
+		
+		initRobot().keyPress(KeyEvent.VK_ENTER);
+		initRobot().keyRelease(KeyEvent.VK_ENTER);	
 	}
 
 	private void input(String var) throws Exception {
