@@ -37,6 +37,7 @@ public class MainClass {
 					type = null;
 				}
 				codewords.execute(codeword, var, type);
+				Thread.sleep(500);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -51,7 +51,7 @@ public class CodeWords {
 		this.var = var;
 		this.type = type;
 
-		switch(codeword) {
+		switch(this.codeword) {
 		case "use":
 			use(var);
 			break;
@@ -114,9 +114,9 @@ public class CodeWords {
 	}
 
 	private void quit() {
-		driver.quit();
-		
+		driver.quit();	
 	}
+	
 	private void enter() {
 		WebElement element = driver.switchTo().activeElement();
 		element.submit();		
@@ -146,7 +146,6 @@ public class CodeWords {
 		FirefoxOptions options = new FirefoxOptions();
 		options.addArguments("--start-fullscreen");
 		driver = new FirefoxDriver(options);
-
 	}
 
 	private static Robot initRobot() throws Exception {
@@ -185,12 +184,10 @@ public class CodeWords {
 
 	private void upload() {
 		// TODO Auto-generated method stub
-
 	}
 
 	private void audio() {
 		// TODO Auto-generated method stub
-
 	}
 
 	private void dragAndDdrop() throws Exception {
@@ -303,18 +300,15 @@ public class CodeWords {
 		for(int i = 1; i <= number; i++) {
 			initRobot().keyPress(KeyEvent.VK_DOWN);
 			initRobot().keyRelease(KeyEvent.VK_DOWN);
-			Thread.sleep(1000);
 		}
-		
 		
 		initRobot().keyPress(KeyEvent.VK_ENTER);
 		initRobot().keyRelease(KeyEvent.VK_ENTER);	
 	}
 
-	private void input(String var) throws Exception {
+	private void input(String var) {
 		WebElement element = driver.switchTo().activeElement();
 		element.sendKeys(var);
-		Thread.sleep(1000);
 	}
 
 	private static void goTo(String var, String type) throws Exception {
@@ -393,7 +387,7 @@ public class CodeWords {
 		}
 	}
 
-	private static void click(String var, String type) throws Exception {
+	private static void click(String var, String type) {
 		if (type.equals("xpath")) {
 			driver.findElement(By.xpath(var)).click();
 		} else if (type.equals("id")) {
@@ -401,7 +395,6 @@ public class CodeWords {
 		} else if (type.equals("name")) {
 			driver.findElement(By.name(var)).click();
 		}	
-		Thread.sleep(2000);
 	}
 
 	private void doubleclick(String var, String type) {
